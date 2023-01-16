@@ -8,11 +8,11 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 def model_fn(model_dir):
     tokenizer_init = AutoTokenizer.from_pretrained('Prompsit/paraphrase-bert-en')
-    compiled_model = os.path.exists(f'{model_dir}/model_neuron.pt')
+    compiled_model = os.path.exists(f'{model_dir}/model.pth')
     if compiled_model:
         import torch_neuron
         os.environ["NEURONCORE_GROUP_SIZES"] = "1"
-        model = torch.jit.load(f'{model_dir}/model_neuron.pt')
+        model = torch.jit.load(f'{model_dir}/model.pth')
     else: 
         model = AutoModelForSequenceClassification.from_pretrained(model_dir).to(device)
     
